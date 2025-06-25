@@ -1,0 +1,14 @@
+.strikethrough
+{
+	text-decoration: line-through;
+}
+
+.addsub
+{
+	min-width: 1.5em;
+}
+
+.small-btn
+{
+	font-size: 8px;
+}

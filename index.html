@@ -1,0 +1,153 @@
+<!doctype html>
+
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Character Sheet</title>
+    <!-- <link rel="shortcut icon" href="favicon.ico"> -->
+	<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="5e.css" rel="stylesheet">
+	<link href="dice.css" rel="stylesheet">
+	<link href="logic.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div id="diceRoller"></div>
+	<main>
+      <div id="mainarea" class="stat-block wide" style="opacity: 0.6;" onmouseenter="onOpacity('mainarea', 0.95);" onmouseleave="onOpacity('mainarea', 0.6);">
+	    <hr class="orange-border" />
+	    <div class="section-left">
+	    	<div class="creature-heading">
+				<h1 id="heading-name">Character Sheet</h1>
+	    		<h2>Mega Growth Dice</h2>
+				<button id="heading-btn" class="small-btn" style="margin-bottom: 1em;" onclick="btnRename();">Rename</button>
+				<input id="heading-input" style="visibility: hidden;" />
+	    	</div> <!-- creature heading -->
+	    	<svg height="5" width="100%" class="tapered-rule">
+				<polyline points="0,0 400,2.5 0,5"></polyline>
+			</svg>
+	    	<div class="top-stats">
+				<div class="property-line first"></div>
+				<div id="stats-container">
+				</div> <!-- stats-container -->
+				<div class="property-line last"></div>
+				<div>
+					<div id="stat-deladd" style="display: none;">
+						<button id="stat-add-btn" class="small-btn" style="margin-bottom: 1em;" onclick="btnAddStat();">Add</button>
+						<button id="stat-del-btn" class="small-btn" style="margin-bottom: 1em;" onclick="btnDelStat();">Delete</button>
+					</div>
+					<div id="stat-input">
+						<button id="stat-save-btn" class="small-btn" style="margin-bottom: 1em;" onclick="btnSaveStat();">Save</button>
+						<button id="stat-esc-btn" class="small-btn" style="margin-bottom: 1em;" onclick="btnCancelStatEdit();">Cancel</button>
+						<input id="stat-name-input" style="width: 10em;" />
+						<input id="stat-value-input" style="width: 10em;" />
+						<select id="stat-unit-input">
+							<option value="cm" default>cm</option>
+							<option value="m">m</option>
+							<!-- <option value="none">N/A</option> -->
+						</select>
+					</div>
+				</div>
+	    		<svg height="5" width="100%" class="tapered-rule">
+					<polyline points="0,0 400,2.5 0,5"></polyline>
+				</svg>
+	    		<div class="property-line first">
+	    			<button onclick="btnDivMul('div', 10);">&div;10</button>
+					<button onclick="btnDivMul('div', 100);">&div;100</button>
+					<button onclick="btnDivMul('div', 1000);">&div;1,000</button>
+	    		</div> <!-- property line -->
+	    		<div class="property-line">
+	    			<button onclick="btnDivMul('mul', 10);">&times;10</button>
+					<button onclick="btnDivMul('mul', 100);">&times;100</button>
+					<button onclick="btnDivMul('mul', 1000);">&times;1,000</button>
+					<button onclick="btnDivMul('mul', 10000);">&times;10,000</button>
+					<button onclick="btnDivMul('mul', 100000);">&times;100,000</button>
+	    		</div> <!-- property line -->
+	    		<div class="property-line last">
+	    			<button onclick="btnDivMul('mul', 1000000);">&times;1,000,000</button>
+					<button onclick="btnDivMul('mul', 1000000000);">&times;1,000,000,000</button>
+	    		</div> <!-- property line -->
+	    	</div> <!-- top stats -->
+	    	<svg height="5" width="100%" class="tapered-rule">
+				<polyline points="0,0 400,2.5 0,5"></polyline>
+			</svg>
+	    	<div class="property-block">
+	    		<button onclick="doRoll('normal');">Roll D20</button>
+				<button onclick="doRoll('bonus');">Roll D6</button>
+	    	</div> <!-- property block -->
+	    	<div class="property-block">
+				<h4>Last Roll: <span id="lastroll-num">-/-</span></h4>
+				<p>(Roll before that: <span id="lastroll-log">-/-</span>)</p>
+				<br>
+				<h4 id="lastroll-title">Last Roll.</h4>
+	    		<p id="lastroll-desc">Your last roll will be displayed here.</p>
+	    	</div> <!-- property block -->
+	    </div> <!-- section left -->
+	    <div class="section-right">
+	    	<div class="actions">
+	    		<h3>Reactions</h3>
+	    		<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'rollenhance');">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'rollenhance');">-</button>
+					<h4 id="rollenhance-head" class="strikethrough">Roll Enhancement.</h4>
+					<h4>x<span id="rollenhance-count">0</span></h4>
+	    			<p id="rollenhance-desc" class="strikethrough">You don't grow this turn, but your next growth is 100 times stronger.</p>
+	    		</div> <!-- property block -->
+	    		<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'safeguard');">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'safeguard');">-</button>
+					<h4 id="safeguard-head" class="strikethrough">Safeguard.</h4>
+					<h4>x<span id="safeguard-count">0</span></h4>
+	    			<p id="safeguard-desc" class="strikethrough">Next time you roll a 1, 2, or 3, grow by a factor of 100 instead.</p>
+	    		</div> <!-- property block -->
+				<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'police');">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'police');">-</button>
+					<h4 id="police-head" class="strikethrough">Growth Police.</h4>
+					<h4>x<span id="police-count">0</span></h4>
+	    			<p id="police-desc" class="strikethrough">Block the next attempt by a player to steal your size.</p>
+	    		</div> <!-- property block -->
+				<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'mimicry', 2);">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'mimicry');">-</button>
+					<h4 id="mimicry-head" class="strikethrough">Mimicry.</h4>
+					<h4>x<span id="mimicry-count">0</span></h4>
+	    			<p id="mimicry-desc" class="strikethrough">The effects of the next two players' next rolls also apply to you.</p>
+	    		</div> <!-- property block -->
+				<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'kingofthieves');">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'kingofthieves');">-</button>
+					<h4 id="kingofthieves-head" class="strikethrough">King of Thieves!</h4>
+					<h4>x<span id="kingofthieves-count">0</span></h4>
+	    			<p id="kingofthieves-desc" class="strikethrough">One time after a player rolls, you may steal the results for yourself.</p>
+	    		</div> <!-- property block -->
+	    	</div> <!-- actions -->
+	    	<div class="actions">
+	    		<h3>Statuses</h3>
+				<div class="property-block">
+	    			<button class="addsub" onclick="btnAddSub('add', 'critcrit');">+</button>
+					<button class="addsub" onclick="btnAddSub('sub', 'critcrit');">-</button>
+					<h4 id="critcrit-head" class="strikethrough">Critical Critical!</h4>
+					<h4>x<span id="critcrit-count">0</span></h4>
+	    			<p id="critcrit-desc" class="strikethrough">All future growth rolls are 100 times stronger! Rolling this again increases the multiplier to 1,000 for the next growth.</p>
+	    		</div> <!-- property block -->
+	    	</div> <!-- actions -->
+	    </div> <!-- section right -->
+	    <hr class="orange-border bottom" />
+      </div> <!-- stat block -->
+    </main>
+	<script src="libs/cannon.min.js"></script>
+	<script src="libs/teal.js"></script>
+	<script src="libs/three.min.js"></script>
+	<script src="dice.js"></script>
+	<script src="decimal.js"></script>
+	<script src="logic.js"></script>
+    <noscript>
+      JavaScript is not enabled. Interactive features will not work.
+    </noscript>
+  </body>
+
+</html>

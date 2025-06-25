@@ -1,0 +1,14 @@
+#diceRoller {
+    position: absolute;
+    top: 0;
+    height: calc(100% - 4.5rem);
+    width: calc(100% - 1.0rem);
+    margin-top: 1.5rem;
+    z-index:-1;
+    overflow: hidden;
+}
+
+#canvas {
+    width: 100%;
+    height: 100%;
+}
