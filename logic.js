@@ -109,6 +109,33 @@ function btnDivMul(type, amount)
 	unitElem.innerText = result.unit;
 }
 
+function btnAddSub(type, amount)
+{
+	var selectedStat = getRadioValue('stat');
+	if(!selectedStat) return;
+	
+	var valueElem = document.getElementById('stat' + selectedStat + '-value');
+	var unitElem = document.getElementById('stat' + selectedStat + '-unit');
+	
+	if(unitElem.innerText !== '') return;
+	
+	var val = Decimal(sanitizeNumber(valueElem.innerText));
+	
+	if(type === 'sub')
+	{
+		if(val.greaterThan(amount))
+			val = val.minus(amount);
+		else
+			val = Decimal(1);
+	}
+	else if(type === 'add')
+	{
+		val = val.add(amount);
+	}
+	
+	valueElem.innerText = val.toFixed(0);
+}
+
 function sanitizeNumber(str) {
 	const regex = /[^\d.\-]/ig;
 	return str.replaceAll(regex, '');
@@ -257,7 +284,7 @@ function btnDelStat()
 	}
 }
 
-function btnAddSub(type, elemId, step)
+function btnStatusChange(type, elemId, step)
 {
 	if(!step) step = 1;
 	

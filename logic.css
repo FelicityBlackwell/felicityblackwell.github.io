@@ -8,6 +8,16 @@
 	min-width: 1.5em;
 }
 
+.statchange
+{
+	min-width: 4em;
+}
+
+.statchangewide
+{
+	min-width: 8em;
+}
+
 .small-btn
 {
 	font-size: 8px;

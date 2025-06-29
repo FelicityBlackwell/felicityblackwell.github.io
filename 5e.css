@@ -104,6 +104,7 @@ body *{
 }
 .property-line h4{
   color: #7A200D;
+  padding-right: 0.2em;
 }
 .property-line{
   text-indent: -1em;
